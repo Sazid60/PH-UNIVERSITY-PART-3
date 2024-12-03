@@ -29,3 +29,48 @@ We start by fixing previous bugs to ensure our code runs smoothly. We then creat
 - We will take the full id and compare with current year with the last admitted students year, current semester code and last students semester code
 
 ![alt text](image.png)
+
+## Populate method to get Referenced data
+
+![alt text](image-1.png)
+
+- Since the referencing shows only the id but we can not understand so we have to use populate method of mongoose
+
+```ts
+// getting data service
+const getAllStudentsFromDB = async () => {
+  const result = await Student.find()
+    .populate('admissionSemester')
+    .populate({
+      path: 'academicDepartment',
+      populate: {
+        path: 'academicFaculty',
+      },
+    });
+  // nested populate is done since academic faculty inside academic department is still showing id
+  return result;
+};
+```
+
+- Custom Error handler with statius code
+
+```ts
+// extending error
+
+class AppError extends Error {
+  public statusCode: number;
+
+  constructor(statusCode: number, message: string, stack: '') {
+    super(message);
+    this.statusCode = statusCode;
+
+    if (stack) {
+      this.stack = stack;
+    } else {
+      Error.captureStackTrace(this, this.constructor);
+    }
+  }
+}
+
+export default AppError;
+```

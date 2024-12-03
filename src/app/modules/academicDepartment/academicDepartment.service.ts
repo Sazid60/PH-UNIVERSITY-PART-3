@@ -16,12 +16,18 @@ const createAcademicDepartmentIntoDB = async (payload: TAcademicDepartment) => {
 };
 
 const getAllAcademicDepartmentsFromDB = async () => {
-  const result = await AcademicDepartment.find();
+  const result = await AcademicDepartment.find().populate('academicFaculty');
+  // this is not ref name this the schema name where we have referred the id.
+  //    academicFaculty: {
+  //   type: Schema.Types.ObjectId,
+  //   ref: 'AcademicFaculty',
+  // },
   return result;
 };
 
 const getSingleAcademicDepartmentFromDB = async (id: string) => {
-  const result = await AcademicDepartment.findById(id);
+  const result =
+    await AcademicDepartment.findById(id).populate('academicFaculty');
   return result;
 };
 
