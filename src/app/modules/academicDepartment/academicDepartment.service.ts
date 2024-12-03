@@ -1,7 +1,16 @@
+import { error } from 'console';
 import { TAcademicDepartment } from './academicDepartment.interface';
 import { AcademicDepartment } from './academicDepartment.model';
 
 const createAcademicDepartmentIntoDB = async (payload: TAcademicDepartment) => {
+  // const isDepartmentExist = await AcademicDepartment.findOne({
+  //   name: payload.name,
+  // });
+
+  // if (isDepartmentExist) {
+  //   throw new Error('Department Already Exists');
+  // }
+  //  we will do this using pre middleware as it is a common work
   const result = await AcademicDepartment.create(payload);
   return result;
 };
