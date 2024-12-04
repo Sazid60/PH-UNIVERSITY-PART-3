@@ -268,3 +268,79 @@ const deleteStudentFromDB = async (id: string) => {
 - We ask for specific field data so that all the data do not come and do not bother bandwidth much
 
 - We will not update password with all. we will update password in different route
+
+- Postman Request body
+
+```ts
+{
+    "student": {
+        "name": {
+            "lastName": "Sazid"
+        },
+        "guardian.fatherOccupation": "Kodu Becha"
+    }
+}
+```
+
+- we will not do this kind "guardian.fatherOccupation": "Kodu Becha" from front end we will do this using backend server
+
+```ts
+{
+    "student": {
+        "name": {
+            "lastName": "Sazid"
+        },
+        "guardian" : {
+            "fatherOccupation": "Kod becha"
+        }
+    }
+}
+```
+
+- if we do this the data will be muted. this is not also allowed
+
+## 13-12 Implement logic to handle dynamically update non-primitive fields
+
+```ts
+// update single student in db
+const updateStudentIntoDB = async (id: string, payload: Partial<TStudent>) => {
+  const { name, guardian, localGuardian, ...remainingStudentData } = payload;
+
+  const modifiedUpdatedData: Record<string, unknown> = {
+    ...remainingStudentData,
+  };
+  /*
+          "guardian" : {
+            "fatherOccupation": "Kod becha"
+        }
+
+        transform to 
+        "guardian.fatherOccupation": "Kodu Becha"
+        using backend
+   */
+
+  if (name && Object.keys(name).length) {
+    for (const [key, value] of Object.entries(name)) {
+      modifiedUpdatedData[`name.${key}`] = value;
+    }
+  }
+  if (guardian && Object.keys(guardian).length) {
+    for (const [key, value] of Object.entries(guardian)) {
+      modifiedUpdatedData[`guardian.${key}`] = value;
+    }
+  }
+  if (localGuardian && Object.keys(localGuardian).length) {
+    for (const [key, value] of Object.entries(localGuardian)) {
+      modifiedUpdatedData[`localGuardian.${key}`] = value;
+    }
+  }
+
+  console.log(modifiedUpdatedData);
+
+  const result = await Student.findOneAndUpdate({ id }, modifiedUpdatedData, {
+    new: true,
+    runValidators: true,
+  });
+  return result;
+};
+```
