@@ -74,3 +74,53 @@ class AppError extends Error {
 
 export default AppError;
 ```
+
+## 13-9 Implement transaction & rollback
+
+### Transactions and Rollbacks (Simple Explanation)
+
+#### What is a Transaction?
+
+A transaction is like a small task or a set of steps that need to be done together to complete a job. If one step fails, the whole task fails. Think of it as a **"do everything or do nothing"** rule.
+
+#### Example:
+
+You want to transfer money:
+
+1. Take money out of your account.
+2. Put the money into your friend's account.
+
+Both steps must happen together. If one step fails (like the second step), the first step is canceled too.
+
+---
+
+#### What is a Rollback?
+
+A rollback means **undoing changes** if something goes wrong during the transaction. It makes sure everything goes back to how it was before the transaction started.
+
+#### Example:
+
+If the money is taken out of your account but doesn’t reach your friend’s account due to an error, the rollback will put the money back into your account.
+
+---
+
+#### Simple Idea:
+
+- A **transaction** is a promise: “Do all the steps or none at all.”
+- A **rollback** is the safety net: “If something breaks, fix everything by undoing changes.”
+
+#### 4 principles of transaction Rollback
+
+1. **Atomicity**: The entire transaction happens completely, or nothing happens at all.
+2. **Consistency**: Ensures the database moves from one valid state to another, maintaining all rules and constraints.
+3. **Isolation**: Transactions run independently without affecting each other, even if they are executed simultaneously.
+4. **Durability**: Once a transaction is completed, its changes are permanent, even if the system crashes.
+
+#### When We Will Use Transaction?
+
+- Two or More database write operation
+- We are writing in user and student collection at a time
+- To use transition rollback we can use startSession() of mongoose
+- startSession() will give isolated environment
+- We have to use startSession() to start the session If all the process is successful we have to use commitTransaction() and endSession()
+- If Fails we have to use abortTransaction() endSession()
