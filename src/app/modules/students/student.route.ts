@@ -9,5 +9,6 @@ router.get('/', StudentController.getAllStudents);
 router.get('/:studentId', StudentController.getSingleStudent);
 // delete student
 router.delete('/:studentId', StudentController.deleteStudent);
+//  this delete id will be the generated id  we have  created by server
 
 export const StudentRoutes = router;

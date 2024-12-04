@@ -34,13 +34,15 @@ const createStudentInDB = async (payload: TStudent, password: string) => {
     payload.admissionSemester,
   );
 
+  if (!admissionSemester) {
+    throw new Error('There Is No Admission Semester');
+  }
   const session = await mongoose.startSession();
 
   try {
     session.startTransaction();
 
     userData.id = await generateStudentId(admissionSemester);
-
     //    create a user (transaction-1)
     //  we have to give data for transaction as array previously it is array
     const newUser = await User.create([userData], { session });
@@ -71,6 +73,7 @@ const createStudentInDB = async (payload: TStudent, password: string) => {
 
     return newStudent;
   } catch (err) {
+    console.log(err);
     await session.abortTransaction();
     await session.endSession();
     throw new Error('Failed to create student');
