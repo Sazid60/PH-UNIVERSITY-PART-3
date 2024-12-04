@@ -7,6 +7,8 @@ const router = express.Router();
 router.get('/', StudentController.getAllStudents);
 // get single students
 router.get('/:studentId', StudentController.getSingleStudent);
+// Update a student
+router.get('/:studentId', StudentController.updateStudent);
 // delete student
 router.delete('/:studentId', StudentController.deleteStudent);
 //  this delete id will be the generated id  we have  created by server

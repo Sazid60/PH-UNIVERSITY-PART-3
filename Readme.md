@@ -212,3 +212,51 @@ export const UserServices = {
   createStudentInDB,
 };
 ```
+
+## 13-10 Delete student using transaction & rollback
+
+```ts
+// delete single student from db
+const deleteStudentFromDB = async (id: string) => {
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+
+    const deletedStudent = await Student.findOneAndUpdate(
+      { id },
+      { isDeleted: true },
+      { new: true, session },
+    );
+    if (!deletedStudent) {
+      throw new AppError(
+        httpStatus.BAD_REQUEST,
+        'Failed To Delete Student',
+        '',
+      );
+    }
+
+    const deletedUser = await User.findOneAndUpdate(
+      { id },
+      { isDeleted: true },
+      { new: true, session },
+    );
+    if (!deletedUser) {
+      throw new AppError(httpStatus.BAD_REQUEST, 'Failed To Delete User', '');
+    }
+
+    await session.commitTransaction();
+    await session.endSession();
+
+    return deletedStudent;
+  } catch (err) {
+    console.log(err);
+    await session.abortTransaction();
+    await session.endSession();
+  }
+};
+```
+
+## 13-11 Dynamically update both primitive & non primitive fields
+
+- for data get update and delete (for user end we will use generated id)
