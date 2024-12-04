@@ -260,3 +260,11 @@ const deleteStudentFromDB = async (id: string) => {
 ## 13-11 Dynamically update both primitive & non primitive fields
 
 - for data get update and delete (for user end we will use generated id)
+
+- Primitive field gets muted when updated
+- But its not allowed to muted non-primitive field because if we muted it will be replaced
+- we can do this by frontend but its not right so we will do it by backend
+- We will tell frontend to send data according to model
+- We ask for specific field data so that all the data do not come and do not bother bandwidth much
+
+- We will not update password with all. we will update password in different route

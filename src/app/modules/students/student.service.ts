@@ -3,6 +3,7 @@ import { Student } from './student.model';
 import AppError from '../../errors/AppError';
 import { User } from '../user/user.model';
 import httpStatus from 'http-status';
+import { TStudent } from './student.interface';
 
 // *******************************************************************
 // getting data service
@@ -34,6 +35,14 @@ const getSingleStudentFromDB = async (id: string) => {
     });
   return result;
 };
+
+// get single student from db
+const updateStudentIntoDB = async (id: string, payload: Partial<TStudent>) => {
+  // using aggregate
+  const result = await Student.findOneAndUpdate({ id }, payload);
+  return result;
+};
+
 // delete single student from db
 const deleteStudentFromDB = async (id: string) => {
   const session = await mongoose.startSession();
@@ -77,4 +86,5 @@ export const StudentServices = {
   getAllStudentsFromDB,
   getSingleStudentFromDB,
   deleteStudentFromDB,
+  updateStudentIntoDB,
 };
